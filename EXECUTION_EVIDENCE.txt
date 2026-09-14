@@ -1,0 +1,36 @@
+COMMAND: python -m unittest -v
+
+test_invalid_status_is_rejected ... ok
+test_negative_passengers_are_rejected ... ok
+test_occupancy_boundaries ... ok
+test_out_of_order_stream_is_rejected ... ok
+test_required_analysis_results ... ok
+test_speed_above_120_is_rejected ... ok
+test_valid_event_is_parsed ... ok
+
+Ran 7 tests
+OK
+
+COMMAND: python main.py
+
+FIRST FIVE STREAM RESULTS
+Event 1: passengers=18, speed=31.0, status=ON_ROUTE, processed=True
+Event 2: passengers=22, speed=28.0, status=ON_ROUTE, processed=True
+Event 3: passengers=21, speed=29.0, status=ON_ROUTE, processed=True
+Event 4: passengers=25, speed=27.0, status=ON_ROUTE, processed=True
+Event 5: passengers=24, speed=0.0, status=STOPPED, processed=True
+
+ANALYSIS
+average_passengers: 24.4
+maximum_passengers: 30
+stopped_events: 1
+busiest_minute: 08:09
+busiest_bus: B02
+
+LIVE HTTP CHECK: POST /events
+
+Valid request response (HTTP 200):
+{"accepted":true,"errors":[],"occupancy_category":"OVER_CAPACITY"}
+
+Invalid request response (HTTP 200):
+{"accepted":false,"errors":["Passengers must be a non-negative integer"],"occupancy_category":null}
